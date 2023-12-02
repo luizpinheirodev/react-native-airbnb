@@ -81,7 +81,6 @@ function RootLayoutNav() {
   }, [isLoaded]);
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
         name="(modals)/login"
         options={{
@@ -97,10 +96,13 @@ function RootLayoutNav() {
           ),
         }}
       />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
       <Stack.Screen
         name="listing/[id]"
         options={{
           headerTitle: "",
+          headerTransparent: false,
         }}
       />
       <Stack.Screen
