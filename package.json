@@ -33,7 +33,9 @@
     "react-native-web": "~0.19.6",
     "expo-secure-store": "~12.3.1",
     "expo-haptics": "~12.4.0",
-    "react-native-reanimated": "~3.3.x"
+    "react-native-reanimated": "~3.3.x",
+    "react-native-maps": "1.7.1",
+    "react-native-map-clustering": "^3.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
