@@ -11,20 +11,42 @@ import React, { useEffect, useRef, useState } from "react";
 import { defaultStyles } from "@/constants/Styles";
 import { Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet";
 
 interface Props {
   listings: any[];
   category: string;
+  refresh: number;
 }
-const Listings = ({ listings: items, category }: Props) => {
+const Listings = ({ listings: items, category, refresh }: Props) => {
   const [loading, setLoading] = useState(false);
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<BottomSheetFlatListMethods>(null);
+
+  useEffect(() => {
+    console.log("REFRESH LISTINGS");
+    if (refresh) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [refresh]);
+
+  useEffect(() => {
+    console.log("RELOAD LISTINGS: ", items.length);
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  }, [category]);
 
   const renderRow: ListRenderItem<any> = ({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
       <TouchableOpacity>
-        <Animated.View style={styles.listing} entering={FadeInRight} exiting={FadeOutLeft}>
+        <Animated.View
+          style={styles.listing}
+          entering={FadeInRight}
+          exiting={FadeOutLeft}
+        >
           <Image source={{ uri: item.medium_url }} style={styles.image} />
           <TouchableOpacity
             style={{ position: "absolute", right: 30, top: 30 }}
@@ -53,20 +75,16 @@ const Listings = ({ listings: items, category }: Props) => {
       </TouchableOpacity>
     </Link>
   );
-  useEffect(() => {
-    console.log("RELOAD LISTINGS: ", items.length);
-    setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 200);
-  }, [category]);
   return (
     <View style={defaultStyles.container}>
-      <FlatList
+      <BottomSheetFlatList
         renderItem={renderRow}
         data={loading ? [] : items}
         ref={listRef}
+        ListHeaderComponent={
+          <Text style={styles.info}>{items.length} homes</Text>
+        }
       />
     </View>
   );
